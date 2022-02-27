@@ -46,7 +46,6 @@ use Net::MQTT::Simple;
 use IO::Socket::INET;
 use IO::Select;
 use IO::Handle;
-use Proc::Daemon;
 use POSIX qw/strftime/;
 use Time::Local;
 
@@ -82,21 +81,7 @@ my $mqtt_server           = 'localhost:1883';
 my $mqtt_username         = '';
 my $mqtt_password         = '';
 my $mqtt_client_id_prefix = 'PV_GROWATT_';
-
-################ Deamonize ################
-
 my $continue = 1;
-if ($is_deamon) {
-    Proc::Daemon::Init;
-    $SIG{TERM} = sub {
-        print "TERM received";
-        $continue = 0;
-    };
-
-    open( SYSLOG, "| /usr/bin/logger -t growatt" ) or die("syslog problem $!");
-    *STDERR = *SYSLOG;
-    autoflush STDERR 1;
-}
 
 ################ Main Loop ################
 
